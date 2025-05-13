@@ -75,14 +75,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 can_count = True  # Reset the counting flag when we reach down position
                     
             else:
-                stage ="move elbow"
+                stage ="Adjust Posture"
             
             # Check if arms are in down position (elbows below shoulders and angles < 90)
             if angle_l < 90 and angle_r < 90 :
                 stage = "down"
             
             # Check if arms are in up position (elbows above shoulders and angles > 160)
-            elif angle_l > 160 and angle_r > 160 :
+            elif angle_l > 160 and angle_r > 160  and angle_hl and angle_hr > 130:
                 stage = "up"
                 
                 # Only count if transitioning from down to up
@@ -107,11 +107,11 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
 )
 
         # Display info
-        cv2.rectangle(image, (0,0), (235,90), (0,0,0), -1)
+        cv2.rectangle(image, (0,0), (373,90), (0,0,0), -1)
         cv2.putText(image, 'REPS', (15,35), cv2.FONT_HERSHEY_COMPLEX, 0.7, (0,255,255), 1)
         cv2.putText(image, str(counter), (15,70), cv2.FONT_HERSHEY_COMPLEX, 0.9, (0,255,255), 2)
-        cv2.putText(image, 'STAGE', (100,35), cv2.FONT_HERSHEY_COMPLEX, 0.7, (0,255,255), 1)
-        cv2.putText(image, stage, (100,70), cv2.FONT_HERSHEY_COMPLEX, 0.9, (0,255,255), 2)
+        cv2.putText(image, 'STAGE', (120,35), cv2.FONT_HERSHEY_COMPLEX, 0.7, (0,255,255), 1)
+        cv2.putText(image, stage, (120,70), cv2.FONT_HERSHEY_COMPLEX, 0.9, (0,255,255), 2)
 
         cv2.imshow('Shoulder Press Counter', image)
         
