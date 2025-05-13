@@ -1,76 +1,118 @@
 import random
-
 class Pet:
-    def __init__(self, name, species, age):
+    def __init__(self,name,species,age):
         self.name = name
-        self.species = species
-        self.age = age
-
-    def display_info(self):
-        return f"{self.name} {self.species}, Age: {self.age}"
-
+        self.species=species
+        self.age=age
+    def display(self):
+        return f"Name - {self.name}  Species - {self.species}  Age - {self.age}"
+    
 class Dog(Pet):
     def __init__(self, name, age, breed, color):
         super().__init__(name, "Dog", age)
         self.breed = breed
         self.color = color
-
-    def display_info(self):
-        return f"{super().display_info()}, Breed: {self.breed}, Color: {self.color}"
-
+    def display(self):
+        base= super().display()
+        return f"{base} Breed - {self.breed}  Color - {self.color}"
+    
 class Cat(Pet):
     def __init__(self, name, age, breed, color):
         super().__init__(name, "Cat", age)
         self.breed = breed
         self.color = color
+    def display(self):
+        base= super().display()
+        return f"{base} Breed - {self.breed}  Color - {self.color}"
+    
+class PetAdpot():
+    def __init__(self):
+        self.pets = {}
+        
+    def addpet(self,pet):
+        while True:
+            petid= random.randint(100,999)
+            if petid not in self.pets:
+                break
+        self.pets[petid]=pet
+        return petid
+    def view_pets(self):
+        if not self.pets:
+            print("No pets available")
+            return
+        print(" ===+PETS AVAILABLE+=== ")
+        for petid,pet in self.pets.items():
+            print(f"ID: {petid} - {pet.display()}")
+    def adopt_pet(self,petid):
+        if petid in self.pets:
+            adpt = self.pets.pop(petid)
+            print(f"Congratulations! You have adopted a pet - {adpt.name}")
+            return adpt
+        else:
+            print("Invalid Pet ID. Please try again")
+            return None
 
-    def display_info(self):
-        return f"{super().display_info()}, Breed: {self.breed}, Color: {self.color}"
+def main():
+    system = PetAdpot()
+    
+    system.addpet(Dog("Lucky",3,"Golden retriever","Golden"))
+    system.addpet(Dog("Yeontan",2,"Pomeranian","Biscuit"))
+    system.addpet(Cat("Ash",3,"Persian","Grey"))
+    system.addpet(Cat("Bella",1,"Siamese","White"))
 
-pet_preferences = {
-    "Lucky": ("playing", "Walk"),
-    "Leo":("Sleeping", "Bones"),
-    "Cat": ("Fish", "Yarn Ball")
-}
+    print("/^^^\\======PRETTY PAWS=======/^^^\\")
+    print("Welcome to our Pet shop ")
+    while True:
+        print("- - - MENU - - -")
+        print("1 - View available pets ")
+        print("2 - Adopt a pet")
+        print("3 - Add a pet ")
+        print("4 - Exit ")
+        
+        choice = int(input("Enter your choice (1-4): "))
+        if choice == 1:
+            system.view_pets()
+        elif choice == 2:
+            system.view_pets()
+            if system.pets:
+                try:
+                    id=int(input("Enter the PetId of the pet you want to adopt: "))
+                    system.adopt_pet(id)
+                except ValueError:
+                    print("Enter a valid Id")
+            
+            
+            
+        elif choice == 3:
+            pet_type=input("Enter the Pet type (Dog/Cat)").capitalize()
+            if pet_type not in ["Dog","Cat"]:
+                print("Enter a valid Pet type - \"Dog\" or \"Cat\" ")
+                continue
+            name = input("Enter name of the pet: ").capitalize()
+            try:
+                age = int(input("Enter the age of the pet: "))
+            except ValueError:
+                print("Enter valid age")
+                continue
+            breed = input(f"Enter the breed of {pet_type}: ")
+            color = input(f"Enter the color of {pet_type}: ")
+            if pet_type == "Dog":
+                new_pet=Dog(name,age,breed,color)
+            else:
+                new_pet = Cat(name,age,breed,color)
+            petid = system.addpet(new_pet)
+            print(f"{pet_type} added with pet id - {petid}")
+            
+        elif choice == 4:
+            print("Thanks for using our system!")
+            break
 
-print("******************* P E T S ***********************")
-dog1 = Dog("Lucky",'10m','husky','Black n White')
-dog2 = Dog("Leo",'15m','Pomeranian','brown')
-cat1 = Cat("ash",'9m','persian','grey')
-
-pet_shelter = {}
-
-def gen_petid():
-  return f"{random.randint(10,99)}"
-
-def add_pet(pet):
-  pet_id = gen_petid()
-  while pet_id in pet_shelter:
-    pet_id = generate_pet_id()
-  pet_shelter[pet_id] = pet
-  return pet_id
-
-def adopt_pet(pet_id):
-  return pet_shelter.pop(pet_id, None)
-
-def display_pets():
-  return {pid: pet.display_info() for pid, pet in pet_shelter.items()}
-
-id1 = add_pet(dog1)
-id2 = add_pet(dog2)
-id3 = add_pet(cat1)
-
-print("\nAvailable pets:")
-for pid, info in display_pets().items():
-  print(f"{pid}: {info}")
-
-print("\nAdopting pet:", id1)
-adopted = adopt_pet(id1)
-if adopted:
-  print("Adopted:", adopted.display_info())
-else:
-  print("Pet not found.")
-
-print("\nRemaining pets:")
-for pid, info in display_pets().items():
-  print(f"{pid}: {info}")
+        else:
+            print("Invalid choise. Enter a valid option")           
+            
+# if __name__ == "__main__":
+main()
+        
+            
+                 
+        
